@@ -8,12 +8,10 @@ use Emarsys\Issues\InvalidTurnaroundTimeException;
 use PHPUnit\Framework\TestCase;
 
 class IssueManagerTest extends TestCase {
-    private IssueManager $issueManager;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->issueManager = new IssueManager();
     }
 
     public function tearDown(): void
@@ -26,7 +24,7 @@ class IssueManagerTest extends TestCase {
      * @test
      */
     public function testShouldReturnDateTimeObject(){
-        $result = $this->issueManager::calculateDueDate(new DateTime("2023-04-17 10:15"), 2);
+        $result = IssueManager::calculateDueDate(new DateTime("2023-04-17 10:15"), 2);
         $this->assertInstanceOf(DateTime::class, $result);
     }
 
@@ -45,7 +43,7 @@ class IssueManagerTest extends TestCase {
      * @dataProvider workingHourIssuesProvider
      */
     public function testShouldCalculateWithinWorkingHours($start, $turnaroundTime, $expectedEnd) {
-        $dateTimeResult = $this->issueManager::calculateDueDate($start, $turnaroundTime);
+        $dateTimeResult = IssueManager::calculateDueDate($start, $turnaroundTime);
         $this->assertEquals($expectedEnd->getTimestamp(), $dateTimeResult->getTimestamp());
     }
 
@@ -67,7 +65,7 @@ class IssueManagerTest extends TestCase {
      */
     public function testShouldThrowNotWorkingHoursException($start, $turnaroundTime) {
         $this->expectException(NotWorkingHourException::class);
-        $this->issueManager::calculateDueDate($start, $turnaroundTime);
+        IssueManager::calculateDueDate($start, $turnaroundTime);
     }
 
     public function invalidTurnaroundTimeProvider(): array
@@ -84,6 +82,6 @@ class IssueManagerTest extends TestCase {
      */
     public function testShouldThrowInvalidTurnaroundTimeException($start, $turnaroundTime) {
         $this->expectException(InvalidTurnaroundTimeException::class);
-        $this->issueManager::calculateDueDate($start, $turnaroundTime);
+        IssueManager::calculateDueDate($start, $turnaroundTime);
     }
 }
