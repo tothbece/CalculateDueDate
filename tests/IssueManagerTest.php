@@ -1,6 +1,7 @@
 <?php
 
 namespace Emarsys\Issues\Test;
+use DateTime;
 use Emarsys\Issues\IssueManager;
 use Emarsys\Issues\NotWorkingHourException;
 use Emarsys\Issues\InvalidTurnaroundTimeException;
@@ -24,10 +25,10 @@ class IssueManagerTest extends TestCase {
     public function workingHourIssuesProvider(): array
     {
         return array(
-          array("2023-04-17 10:15", 2, "2023-04-17 12:15"), // from Monday, 2h
-          array("2023-04-17 10:15", 8, "2023-04-18 10:15"), // from Monday, 8h
-          array("2023-04-17 10:15", 16, "2023-04-19 10:15"), // from Monday, 16h
-          array("2023-04-20 10:15", 16, "2023-04-24 10:15"), // from Thursday, 16h
+          array(new DateTime("2023-04-17 10:15"), 2, "2023-04-17 12:15"), // from Monday, 2h
+          array(new DateTime("2023-04-17 10:15"), 8, "2023-04-18 10:15"), // from Monday, 8h
+          array(new DateTime("2023-04-17 10:15"), 16, "2023-04-19 10:15"), // from Monday, 16h
+          array(new DateTime("2023-04-20 10:15"), 16, "2023-04-24 10:15"), // from Thursday, 16h
         );
     }
 
@@ -44,12 +45,12 @@ class IssueManagerTest extends TestCase {
     public function notWorkingHourIssuesProvider(): array
     {
         return array(
-            array("2023-04-17 7:12", 2), // from Monday, but too early
-            array("2023-04-17 8:59", 7), // from Monday, but too early
-            array("2023-04-17 17:00", 16), // from Monday, but too late
-            array("2023-04-17 21:41", 4), // from Monday, but too late
-            array("2023-04-22 13:10", 4), // from Saturday
-            array("2023-04-23 10:10", 3), // from Sunday
+            array(new DateTime("2023-04-17 7:12"), 2), // from Monday, but too early
+            array(new DateTime("2023-04-17 8:59"), 7), // from Monday, but too early
+            array(new DateTime("2023-04-17 17:00"), 16), // from Monday, but too late
+            array(new DateTime("2023-04-17 21:41"), 4), // from Monday, but too late
+            array(new DateTime("2023-04-22 13:10"), 4), // from Saturday
+            array(new DateTime("2023-04-23 10:10"), 3), // from Sunday
         );
     }
 
@@ -65,8 +66,8 @@ class IssueManagerTest extends TestCase {
     public function invalidTurnaroundTimeProvider(): array
     {
         return array(
-            array("2023-04-17 9:00", 0), // turnaround time shouldn't be zero
-            array("2023-04-17 9:00", -1), // turnaround time shouldn't be negative
+            array(new DateTime("2023-04-17 9:00"), 0), // turnaround time shouldn't be zero
+            array(new DateTime("2023-04-17 9:00"), -1), // turnaround time shouldn't be negative
         );
     }
 
