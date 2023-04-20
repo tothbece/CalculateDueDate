@@ -1,24 +1,24 @@
 <?php
 
-namespace Emarsys\Tasks\Test;
-use Emarsys\Tasks\TaskManager;
-use Emarsys\Tasks\NotWorkingHourException;
-use Emarsys\Tasks\InvalidTurnaroundTimeException;
+namespace Emarsys\Issues\Test;
+use Emarsys\Issues\IssueManager;
+use Emarsys\Issues\NotWorkingHourException;
+use Emarsys\Issues\InvalidTurnaroundTimeException;
 use PHPUnit\Framework\TestCase;
 
-class TaskManagerTest extends TestCase {
-    private TaskManager $taskManager;
+class IssueManagerTest extends TestCase {
+    private IssueManager $issueManager;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->taskManager = new TaskManager();
+        $this->issueManager = new IssueManager();
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
-        unset($this->taskManager);
+        unset($this->issueManager);
     }
 
     public function workingHourTasksProvider(): array
@@ -36,7 +36,7 @@ class TaskManagerTest extends TestCase {
      * @dataProvider workingHourTasksProvider
      */
     public function testShouldCalculateWithinWorkingHours($start, $turnaroundTime, $expectedEnd) {
-        $dateTimeResult = $this->taskManager::calculateDueDate($start, $turnaroundTime);
+        $dateTimeResult = $this->issueManager::calculateDueDate($start, $turnaroundTime);
         $formattedResult = $dateTimeResult->format("Y-m-d H:i");
         $this->assertEquals($expectedEnd, $formattedResult);
     }
@@ -59,7 +59,7 @@ class TaskManagerTest extends TestCase {
      */
     public function testShouldThrowNotWorkingHoursException($start, $turnaroundTime) {
         $this->expectException(NotWorkingHourException::class);
-        $this->taskManager::calculateDueDate($start, $turnaroundTime);
+        $this->issueManager::calculateDueDate($start, $turnaroundTime);
     }
 
     public function invalidTurnaroundTimeProvider(): array
@@ -76,6 +76,6 @@ class TaskManagerTest extends TestCase {
      */
     public function testShouldThrowInvalidTurnaroundTimeException($start, $turnaroundTime) {
         $this->expectException(InvalidTurnaroundTimeException::class);
-        $this->taskManager::calculateDueDate($start, $turnaroundTime);
+        $this->issueManager::calculateDueDate($start, $turnaroundTime);
     }
 }
