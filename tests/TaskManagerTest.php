@@ -3,6 +3,7 @@
 namespace Emarsys\Tasks\Test;
 use Emarsys\Tasks\TaskManager;
 use Emarsys\Tasks\NotWorkingHourException;
+use Emarsys\Tasks\InvalidTurnaroundTimeException;
 use PHPUnit\Framework\TestCase;
 
 class TaskManagerTest extends TestCase {
@@ -58,6 +59,23 @@ class TaskManagerTest extends TestCase {
      */
     public function testShouldThrowNotWorkingHoursException($start, $turnaroundTime) {
         $this->expectException(NotWorkingHourException::class);
+        $this->taskManager->calculateDueDate($start, $turnaroundTime);
+    }
+
+    public function invalidTurnaroundTimeProvider(): array
+    {
+        return array(
+            array("2023-04-17 9:00", 0), // turnaround time shouldn't be zero
+            array("2023-04-17 9:00", -1), // turnaround time shouldn't be negative
+        );
+    }
+
+    /**
+     * @dataProvider invalidTurnaroundTimeProvider
+     * @test
+     */
+    public function testShouldThrowInvalidTurnaroundTimeException($start, $turnaroundTime) {
+        $this->expectException(InvalidTurnaroundTimeException::class);
         $this->taskManager->calculateDueDate($start, $turnaroundTime);
     }
 }
