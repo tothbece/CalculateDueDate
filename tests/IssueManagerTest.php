@@ -21,7 +21,7 @@ class IssueManagerTest extends TestCase {
         unset($this->issueManager);
     }
 
-    public function workingHourTasksProvider(): array
+    public function workingHourIssuesProvider(): array
     {
         return array(
           array("2023-04-17 10:15", 2, "2023-04-17 12:15"), // from Monday, 2h
@@ -33,7 +33,7 @@ class IssueManagerTest extends TestCase {
 
     /**
      * @test
-     * @dataProvider workingHourTasksProvider
+     * @dataProvider workingHourIssuesProvider
      */
     public function testShouldCalculateWithinWorkingHours($start, $turnaroundTime, $expectedEnd) {
         $dateTimeResult = $this->issueManager::calculateDueDate($start, $turnaroundTime);
@@ -41,7 +41,7 @@ class IssueManagerTest extends TestCase {
         $this->assertEquals($expectedEnd, $formattedResult);
     }
 
-    public function notWorkingHourTasksProvider(): array
+    public function notWorkingHourIssuesProvider(): array
     {
         return array(
             array("2023-04-17 7:12", 2), // from Monday, but too early
@@ -54,7 +54,7 @@ class IssueManagerTest extends TestCase {
     }
 
     /**
-     * @dataProvider notWorkingHourTasksProvider
+     * @dataProvider notWorkingHourIssuesProvider
      * @test
      */
     public function testShouldThrowNotWorkingHoursException($start, $turnaroundTime) {
