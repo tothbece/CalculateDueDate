@@ -25,10 +25,10 @@ class IssueManagerTest extends TestCase {
     public function workingHourIssuesProvider(): array
     {
         return array(
-          array(new DateTime("2023-04-17 10:15"), 2, "2023-04-17 12:15"), // from Monday, 2h
-          array(new DateTime("2023-04-17 10:15"), 8, "2023-04-18 10:15"), // from Monday, 8h
-          array(new DateTime("2023-04-17 10:15"), 16, "2023-04-19 10:15"), // from Monday, 16h
-          array(new DateTime("2023-04-20 10:15"), 16, "2023-04-24 10:15"), // from Thursday, 16h
+          array(new DateTime("2023-04-17 10:15"), 2, new DateTime("2023-04-17 12:15")), // from Monday, 2h
+          array(new DateTime("2023-04-17 10:15"), 8, new DateTime("2023-04-18 10:15")), // from Monday, 8h
+          array(new DateTime("2023-04-17 10:15"), 16, new DateTime("2023-04-19 10:15")), // from Monday, 16h
+          array(new DateTime("2023-04-20 10:15"), 16, new DateTime("2023-04-24 10:15")), // from Thursday, 16h
         );
     }
 
@@ -38,8 +38,7 @@ class IssueManagerTest extends TestCase {
      */
     public function testShouldCalculateWithinWorkingHours($start, $turnaroundTime, $expectedEnd) {
         $dateTimeResult = $this->issueManager::calculateDueDate($start, $turnaroundTime);
-        $formattedResult = $dateTimeResult->format("Y-m-d H:i");
-        $this->assertEquals($expectedEnd, $formattedResult);
+        $this->assertEquals($expectedEnd->getTimestamp(), $dateTimeResult->getTimestamp());
     }
 
     public function notWorkingHourIssuesProvider(): array
