@@ -22,6 +22,14 @@ class IssueManagerTest extends TestCase {
         unset($this->issueManager);
     }
 
+    /**
+     * @test
+     */
+    public function testShouldReturnDateTimeObject(){
+        $result = $this->issueManager::calculateDueDate(new DateTime("2023-04-17 10:15"), 2);
+        $this->assertInstanceOf(DateTime::class, $result);
+    }
+
     public function workingHourIssuesProvider(): array
     {
         return array(
