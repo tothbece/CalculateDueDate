@@ -8,18 +8,7 @@ use Emarsys\Issues\InvalidTurnaroundTimeException;
 use PHPUnit\Framework\TestCase;
 
 class IssueManagerTest extends TestCase {
-
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        unset($this->issueManager);
-    }
-
+    
     /**
      * @test
      */
