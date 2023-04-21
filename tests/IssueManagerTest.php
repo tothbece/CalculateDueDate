@@ -20,10 +20,10 @@ class IssueManagerTest extends TestCase {
     public function workingHourIssuesProvider(): array
     {
         return array(
-          array(new DateTime("2023-04-17 10:15"), 2, new DateTime("2023-04-17 12:15")), // from Monday, 2h
-          array(new DateTime("2023-04-17 10:15"), 8, new DateTime("2023-04-18 10:15")), // from Monday, 8h
-          array(new DateTime("2023-04-17 10:15"), 16, new DateTime("2023-04-19 10:15")), // from Monday, 16h
-          array(new DateTime("2023-04-20 10:15"), 16, new DateTime("2023-04-24 10:15")), // from Thursday, 16h
+          array(new DateTime("2023-04-17 10:15"), 2, new DateTime("2023-04-17 12:15")), // from Monday, 2h (same day ending)
+          array(new DateTime("2023-04-17 10:15"), 8, new DateTime("2023-04-18 10:15")), // from Monday, 8h (next day ending)
+          array(new DateTime("2023-04-17 10:15"), 16, new DateTime("2023-04-19 10:15")), // from Monday, 16h (2 working days long issue)
+          array(new DateTime("2023-04-20 10:15"), 16, new DateTime("2023-04-24 10:15")), // from Thursday, 16h (weekend)
         );
     }
 
