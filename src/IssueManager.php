@@ -22,26 +22,19 @@ class IssueManager {
         $startTimeHour = intval($startDatetime->format("G")); // 0-23
         if ($startTimeHour < 9 || $startTimeHour >= 17) throw new NotWorkingHourException();
 
-        $numOfWorkdaysForIssue = $turnaroundTime / 8;
-        $numOfWeekends = 0;
-        if ($startDayOfWeek + $numOfWorkdaysForIssue >= 6) { // there is at least one weekend in timespan
-            while ($startDayOfWeek + $numOfWorkdaysForIssue >= 6) {
-                $numOfWeekends++;
-                $numOfWorkdaysForIssue -= 5;
-            }
-        }
-
         $startTimestamp = $startDatetime->getTimestamp();
         $turnaroundTimeInMinutes = $turnaroundTime*60;
-        if ($turnaroundTimeInMinutes < self::minutesUntilEndOfDay($startDatetime)) {
-            return (new DateTime())->setTimestamp($startTimestamp+$turnaroundTimeInMinutes*60);
-        }
         $endTimestamp = $startTimestamp;
+
         while ($turnaroundTimeInMinutes >= self::minutesUntilEndOfDay($startDatetime)) {
             $endTimestamp += 24*60*60;
             $turnaroundTimeInMinutes -= 8*60;
+            // checking if we reached a weekend (Saturday)
+            if ( intval((new DateTime())->setTimestamp($endTimestamp)->format("N")) == 6 )
+                $endTimestamp += 2*24*60*60;
         }
-        $endTimestamp += $turnaroundTimeInMinutes * 60 + $numOfWeekends * 2 * 24 * 60 * 60;
+        $endTimestamp += $turnaroundTimeInMinutes * 60;
+
         return (new DateTime())->setTimestamp($endTimestamp);
 
     }
@@ -51,7 +44,7 @@ class IssueManager {
      */
     private static function minutesUntilEndOfDay(DateTime $dateTime): int {
         $date = $dateTime->format("Y-m-d");
-        $endOfDay = new DateTime($date." 16:00");
+        $endOfDay = new DateTime($date." 17:00");
         $deltaInSeconds = $endOfDay->getTimestamp()-$dateTime->getTimestamp();
         return intval($deltaInSeconds/60);
     }
