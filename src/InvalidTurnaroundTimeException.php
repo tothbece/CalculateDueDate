@@ -2,6 +2,8 @@
 
 namespace Emarsys\Issues;
 
-class InvalidTurnaroundTimeException {
+use Exception;
+
+class InvalidTurnaroundTimeException extends Exception {
 
 }

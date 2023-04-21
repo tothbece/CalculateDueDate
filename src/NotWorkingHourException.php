@@ -2,6 +2,8 @@
 
 namespace Emarsys\Issues;
 
-class NotWorkingHourException {
+use Exception;
+
+class NotWorkingHourException  extends Exception {
 
 }
