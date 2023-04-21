@@ -24,6 +24,7 @@ class IssueManagerTest extends TestCase {
           array(new DateTime("2023-04-17 10:15"), 8, new DateTime("2023-04-18 10:15")), // from Monday, 8h (next day ending)
           array(new DateTime("2023-04-17 10:15"), 16, new DateTime("2023-04-19 10:15")), // from Monday, 16h (2 working days long issue)
           array(new DateTime("2023-04-20 10:15"), 16, new DateTime("2023-04-24 10:15")), // from Thursday, 16h (weekend)
+          array(new DateTime("2023-04-20 10:15"), 56, new DateTime("2023-05-01 10:15")), // from Thursday, 56h (2 weekends)
         );
     }
 
