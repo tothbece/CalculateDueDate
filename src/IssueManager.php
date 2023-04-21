@@ -22,6 +22,15 @@ class IssueManager {
         $startTimeHour = intval($startDatetime->format("G")); // 0-23
         if ($startTimeHour < 9 || $startTimeHour >= 17) throw new NotWorkingHourException();
 
+        $numOfWorkdaysForIssue = $turnaroundTime / 8;
+        $numOfWeekends = 0;
+        if ($startDayOfWeek + $numOfWorkdaysForIssue >= 6) { // there is at least one weekend in timespan
+            while ($startDayOfWeek + $numOfWorkdaysForIssue >= 6) {
+                $numOfWeekends++;
+                $numOfWorkdaysForIssue -= 5;
+            }
+        }
+
         $startTimestamp = $startDatetime->getTimestamp();
         $turnaroundTimeInMinutes = $turnaroundTime*60;
         if ($turnaroundTimeInMinutes < self::minutesUntilEndOfDay($startDatetime)) {
@@ -32,7 +41,7 @@ class IssueManager {
             $endTimestamp += 24*60*60;
             $turnaroundTimeInMinutes -= 8*60;
         }
-        $endTimestamp += $turnaroundTimeInMinutes * 60;
+        $endTimestamp += $turnaroundTimeInMinutes * 60 + $numOfWeekends * 2 * 24 * 60 * 60;
         return (new DateTime())->setTimestamp($endTimestamp);
 
     }
