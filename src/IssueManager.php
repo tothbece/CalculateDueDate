@@ -27,8 +27,14 @@ class IssueManager {
         if ($turnaroundTimeInMinutes < self::minutesUntilEndOfDay($startDatetime)) {
             return (new DateTime())->setTimestamp($startTimestamp+$turnaroundTimeInMinutes*60);
         }
+        $endTimestamp = $startTimestamp;
+        while ($turnaroundTimeInMinutes >= self::minutesUntilEndOfDay($startDatetime)) {
+            $endTimestamp += 24*60*60;
+            $turnaroundTimeInMinutes -= 8*60;
+        }
+        $endTimestamp += $turnaroundTimeInMinutes * 60;
+        return (new DateTime())->setTimestamp($endTimestamp);
 
-        return new DateTime();
     }
 
     /**
